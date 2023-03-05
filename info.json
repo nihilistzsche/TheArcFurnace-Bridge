@@ -1,0 +1,13 @@
+{
+  "name": "se-thearcfurnaceimp-bridge",
+  "version": "0.0.1",
+  
+  "title": "se-thearcfurnaceimp-bridge",
+  "description": "Adds arc furnace recipes for TheArcFurnaceImp from Space Exploration kiln category",
+  
+  "author": "nihilistzsche",
+  "license": "GPL3",
+  
+  "dependencies": ["base >= 1.1.6", "TheArcFurnaceImp", "space-exploration" ],
+  "factorio_version": "1.1"
+}
