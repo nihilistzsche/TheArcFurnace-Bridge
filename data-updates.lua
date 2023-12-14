@@ -52,9 +52,9 @@ local function copy_recipe_data(src, dst, scale)
                 dst["results"][idx] = {
                     ["type"] = rspec["type"],
                     ["name"] = rspec["name"],
-                    ["amount"] = (rspec["amount"] or 0) * scale,
-					["amount_min"] = (rspec["amount_min"] or 0) * scale,
-					["amount_max"] = (rspec["amount_max"] or 0) * scale,
+                    ["amount"] = (rspec["amount"] or 1) * scale,
+					["amount_min"] = (rspec["amount_min"] or 1) * scale,
+					["amount_max"] = (rspec["amount_max"] or 1) * scale,
                     ["temperture"] = rspec["temperature"]
                 }
             end
@@ -87,10 +87,6 @@ end
 
 
 local function generate_arc_smelting_recipe(original_recipe)
-    if original_recipe["category"] ~= "kiln" then
-        return
-    end
-
     recipe = {
         ["type"] = "recipe",
         ["name"] = "arc-" .. original_recipe["name"],
@@ -102,10 +98,23 @@ local function generate_arc_smelting_recipe(original_recipe)
     mimic_recipe_module_limitations(original_recipe["name"], recipe["name"])
 end
 
+local function verify_results(recipe)
+    if not recipe.result or recipe.results then
+        return false
+    end
+    if recipe.result and not recipe.result.name then
+        return false
+    elseif not recipe.results[1].name then
+        return false
+    end
+    return true
+end
 
 -- Generate smelting recipes
 for _, recipe in pairs(data.raw["recipe"]) do
-    if recipe["category"] == "kiln" then
-        generate_arc_smelting_recipe(recipe)
+    if recipe["category"] == "kiln" or recipe["category"] == "smelting" then
+        if recipe["name"] and recipe["name"] ~= "" and verify_results(recipe) and not data.raw.recipe["arc-"..recipe["name"]] then
+            generate_arc_smelting_recipe(recipe)
+        end
     end
 end
