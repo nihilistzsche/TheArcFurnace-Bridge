@@ -1,6 +1,6 @@
 {
   "name": "TheArcFurnace-Bridge",
-  "version": "0.0.2",
+  "version": "0.0.3",
   
   "title": "TheArcFurnace-Bridge",
   "description": "Adds arc furnace recipes for all recipes in the smelting category or kiln category from Space Exploration",
@@ -8,6 +8,6 @@
   "author": "nihilistzsche",
   "license": "GPL3",
   
-  "dependencies": ["base >= 1.1.6", "TheArcFurnace", "space-exploration" ],
+  "dependencies": [ "base >= 1.1.6", "TheArcFurnace", "(?) space-exploration-postprocess" ],
   "factorio_version": "1.1"
 }
