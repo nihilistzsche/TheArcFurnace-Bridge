@@ -1,7 +1,7 @@
-local util = {}
+local arc_util = {}
 
 local max_amt = 65535
-function util.update_amounts(dst, scale)
+function arc_util.update_amounts(dst, scale)
     for idx, ispec in pairs(dst.ingredients) do
         if #ispec > 1 then
             local i = dst.ingredients[idx]
@@ -20,7 +20,7 @@ function util.update_amounts(dst, scale)
     if dst.results then
         for idx, rspec in pairs(dst.results) do
             local i = dst.results[idx]
-            function util.upd(key)
+            function arc_util.upd(key)
                 if i[key] then
                     i[key] = math.min(i[key] * scale, max_amt)
                 end
@@ -32,17 +32,17 @@ function util.update_amounts(dst, scale)
     end
 end
             
-function util.copy_recipe_data(src, scale)
+function arc_util.copy_recipe_data(src, scale)
     local dst = util.table.deepcopy(src)
     if dst.normal or expensive then
         if dst.normal then
-            util.update_amounts(dst.normal, scale)
+            arc_util.update_amounts(dst.normal, scale)
         end
         if dst.expensive then
-            util.update_amounts(dst.expensive, scale)
+            arc_util.update_amounts(dst.expensive, scale)
         end
     else
-        util.update_amounts(dst, scale)
+        arc_util.update_amounts(dst, scale)
     end
     dst.name = "arc-"..src.name
     dst.category = "arc-smelting"
@@ -50,7 +50,7 @@ function util.copy_recipe_data(src, scale)
 end
 
 
-function util.mimic_recipe_module_limitations(source_recipe, target_recipe)
+function arc_util.mimic_recipe_module_limitations(source_recipe, target_recipe)
     for _, module in pairs(data.raw["module"]) do
         if module.limitation ~= nil then
             for _, recipe in ipairs(module.limitation) do
@@ -73,12 +73,12 @@ function util.mimic_recipe_module_limitations(source_recipe, target_recipe)
 end
 
 
-function util.generate_arc_smelting_recipe(original_recipe)
-    data:extend({util.copy_recipe_data(original_recipe, 10)})
-    util.mimic_recipe_module_limitations(original_recipe.name, recipe.name)
+function arc_util.generate_arc_smelting_recipe(original_recipe)
+    data:extend({arc_util.copy_recipe_data(original_recipe, 10)})
+    arc_util.mimic_recipe_module_limitations(original_recipe.name, recipe.name)
 end
 
-function util.verify_results(recipe)
+function arc_util.verify_results(recipe)
     local passed = false
     if recipe.normal or recipe.expensive then
         if recipe.normal then
@@ -97,4 +97,4 @@ function util.verify_results(recipe)
     return passed
 end
 
-return util
+return arc_util
